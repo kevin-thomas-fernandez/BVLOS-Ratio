@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SORA Risk Assessment Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e5e5e5;
+            padding: 20px 40px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+        }
+
+        .nav-links a {
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 40px 80px;
+        }
+
+        .header {
+            margin-bottom: 80px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            padding-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+        }
+
+        .section h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 32px 0 20px 0;
+            color: #1a1a1a;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 400;
+            font-size: 14px;
+            color: #1a1a1a;
+            letter-spacing: 0.2px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+            transition: border-color 0.3s;
+            color: #1a1a1a;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-bottom-color: #1a1a1a;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .btn:hover {
+            background: #333;
+        }
+
+        .btn:active {
+            background: #1a1a1a;
+        }
+
+        .results {
+            grid-column: 1 / -1;
+            background: #fafafa;
+            padding: 60px;
+            margin-top: 40px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .results h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 48px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .result-card {
+            text-align: left;
+        }
+
+        .result-card h3 {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #666;
+        }
+
+        .result-value {
+            font-size: 48px;
+            font-weight: 300;
+            margin: 8px 0;
+            color: #1a1a1a;
+            letter-spacing: -1px;
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .info-box {
+            background: transparent;
+            border-left: 2px solid #1a1a1a;
+            padding: 16px 0 16px 20px;
+            margin: 24px 0;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .warning-box {
+            background: transparent;
+            border-left: 2px solid #ffc107;
+            padding: 16px 0 16px 20px;
+            margin: 24px 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .error-box {
+            background: transparent;
+            border-left: 2px solid #dc3545;
+            padding: 16px 0 16px 20px;
+            margin: 24px 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .mitigation-group {
+            background: transparent;
+            padding: 24px 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .mitigation-group:last-child {
+            border-bottom: none;
+        }
+
+        .mitigation-group label {
+            font-weight: 500;
+            font-size: 14px;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .footer {
+            margin-top: 120px;
+            padding-top: 40px;
+            border-top: 1px solid #e5e5e5;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 968px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .nav {
+                padding: 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                padding: 100px 20px 60px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .results {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-title">SORA Assessment</div>
+        <div class="nav-links">
+            <a href="#assessment">Assessment</a>
+            <a href="#results">Results</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>SORA Risk Assessment</h1>
+            <p>Specific Operations Risk Assessment (SORA) — JARUS Guidelines v2.5</p>
+        </div>
+
+        <div class="content">
+            <!-- Step 1: UA Characteristics -->
+            <div class="section">
+                <h2>Step 1: UA Characteristics</h2>
+                <div class="form-group">
+                    <label for="uaWeight">UA Weight (grams)</label>
+                    <input type="number" id="uaWeight" min="0" step="0.1" placeholder="e.g., 250">
+                    <div class="info-box" style="margin-top: 12px;">UA ≤ 250g with speed ≤ 25 m/s gets iGRC = 1</div>
+                </div>
+                <div class="form-group">
+                    <label for="maxDimension">Maximum UA Characteristic Dimension (meters)</label>
+                    <select id="maxDimension">
+                        <option value="">Select dimension</option>
+                        <option value="1">≤ 1 m (≈ 3 ft)</option>
+                        <option value="3">≤ 3 m (≈ 10 ft)</option>
+                        <option value="8">≤ 8 m (≈ 25 ft)</option>
+                        <option value="20">≤ 20 m (≈ 65 ft)</option>
+                        <option value="40">≤ 40 m (≈ 130 ft)</option>
+                        <option value=">40">> 40 m</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="maxSpeed">Maximum Speed (m/s)</label>
+                    <select id="maxSpeed">
+                        <option value="">Select speed</option>
+                        <option value="25">≤ 25 m/s</option>
+                        <option value="35">≤ 35 m/s</option>
+                        <option value="75">≤ 75 m/s</option>
+                        <option value="120">≤ 120 m/s</option>
+                        <option value="200">≤ 200 m/s</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Step 2: Population Density -->
+            <div class="section">
+                <h2>Step 2: Population Density</h2>
+                <div class="form-group">
+                    <label>Maximum Population Density in iGRC Footprint</label>
+                    <select id="populationDensity">
+                        <option value="">Select population density</option>
+                        <option value="controlled">Controlled Ground Area</option>
+                        <option value="<5">< 5 people/km² (Remote)</option>
+                        <option value="<50">< 50 people/km² (Lightly populated)</option>
+                        <option value="<500">< 500 people/km² (Sparsely populated)</option>
+                        <option value="<5000">< 5,000 people/km² (Suburban/Low density metropolitan)</option>
+                        <option value="<50000">< 50,000 people/km² (High density metropolitan)</option>
+                        <option value=">50000">> 50,000 people/km² (Assemblies of people)</option>
+                    </select>
+                </div>
+                <div class="info-box">
+                    <strong>Note:</strong> The iGRC footprint includes the operational volume plus the ground risk buffer.
+                </div>
+            </div>
+
+            <!-- Step 3: Ground Risk Mitigations -->
+            <div class="section">
+                <h2>Step 3: Ground Risk Mitigations (Optional)</h2>
+                <div class="mitigation-group">
+                    <label>M1(A) - Strategic Mitigations - Sheltering</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="m1a" id="m1a-none" value="0" checked>
+                            <label for="m1a-none">None</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="m1a" id="m1a-low" value="-1">
+                            <label for="m1a-low">Low (-1)</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="m1a" id="m1a-medium" value="-2">
+                            <label for="m1a-medium">Medium (-2)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mitigation-group">
+                    <label>M1(B) - Strategic Mitigations - Operational Restrictions</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="m1b" id="m1b-none" value="0" checked>
+                            <label for="m1b-none">None</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="m1b" id="m1b-medium" value="-1">
+                            <label for="m1b-medium">Medium (-1)</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="m1b" id="m1b-high" value="-2">
+                            <label for="m1b-high">High (-2)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mitigation-group">
+                    <label>M1(C) - Tactical Mitigations - Ground Observation</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="m1c" id="m1c-none" value="0" checked>
+                            <label for="m1c-none">None</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="m1c" id="m1c-low" value="-1">
+                            <label for="m1c-low">Low (-1)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mitigation-group">
+                    <label>M2 - Effects of UA Impact Dynamics are Reduced</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="m2" id="m2-none" value="0" checked>
+                            <label for="m2-none">None</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="m2" id="m2-medium" value="-1">
+                            <label for="m2-medium">Medium (-1)</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="m2" id="m2-high" value="-2">
+                            <label for="m2-high">High (-2)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Air Risk Class -->
+            <div class="section">
+                <h2>Step 4: Air Risk Class (ARC)</h2>
+                <div class="form-group">
+                    <label for="initialARC">Initial Air Risk Class</label>
+                    <select id="initialARC">
+                        <option value="">Select initial ARC</option>
+                        <option value="a">ARC-a (Atypical airspace - segregated)</option>
+                        <option value="b">ARC-b (Low collision risk)</option>
+                        <option value="c">ARC-c (Medium collision risk)</option>
+                        <option value="d">ARC-d (High collision risk)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="residualARC">Residual ARC (after strategic mitigations)</label>
+                    <select id="residualARC">
+                        <option value="">Select residual ARC</option>
+                        <option value="a">ARC-a</option>
+                        <option value="b">ARC-b</option>
+                        <option value="c">ARC-c</option>
+                        <option value="d">ARC-d</option>
+                    </select>
+                </div>
+                <div class="info-box">
+                    <strong>Note:</strong> If strategic mitigations are applied, select the resulting residual ARC. Otherwise, residual ARC = initial ARC.
+                </div>
+            </div>
+
+            <button class="btn" onclick="calculateSORA()">Calculate SORA Assessment</button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results" id="results" style="display: none;">
+            <h2>Assessment Results</h2>
+            <div class="result-grid">
+                <div class="result-card">
+                    <h3>Intrinsic Ground Risk Class</h3>
+                    <div class="result-value" id="iGRC">-</div>
+                    <div class="result-label">iGRC</div>
+                </div>
+                <div class="result-card">
+                    <h3>Final Ground Risk Class</h3>
+                    <div class="result-value" id="finalGRC">-</div>
+                    <div class="result-label">GRC</div>
+                </div>
+                <div class="result-card">
+                    <h3>Residual Air Risk Class</h3>
+                    <div class="result-value" id="resARC">-</div>
+                    <div class="result-label">ARC</div>
+                </div>
+                <div class="result-card">
+                    <h3>Specific Assurance & Integrity Level</h3>
+                    <div class="result-value" id="sail">-</div>
+                    <div class="result-label">SAIL</div>
+                </div>
+            </div>
+            <div id="additionalResults" style="margin-top: 60px;"></div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 SORA Risk Assessment Tool</p>
+        </div>
+    </div>
+
+    <script>
+        // iGRC Lookup Table based on Table 2
+        const iGRCTable = {
+            "1": {
+                "25": {
+                    "controlled": 1,
+                    "<5": 1,
+                    "<50": 1,
+                    "<500": 1,
+                    "<5000": 1,
+                    "<50000": 1,
+                    ">50000": 1
+                },
+                "35": {
+                    "controlled": 1,
+                    "<5": 1,
+                    "<50": 1,
+                    "<500": 1,
+                    "<5000": 1,
+                    "<50000": 1,
+                    ">50000": 1
+                },
+                "75": {
+                    "controlled": 1,
+                    "<5": 1,
+                    "<50": 2,
+                    "<500": 2,
+                    "<5000": 2,
+                    "<50000": 2,
+                    ">50000": 2
+                },
+                "120": {
+                    "controlled": 1,
+                    "<5": 1,
+                    "<50": 2,
+                    "<500": 3,
+                    "<5000": 3,
+                    "<50000": 3,
+                    ">50000": 3
+                },
+                "200": {
+                    "controlled": 1,
+                    "<5": 1,
+                    "<50": 2,
+                    "<500": 3,
+                    "<5000": 3,
+                    "<50000": 3,
+                    ">50000": 3
+                }
+            },
+            "3": {
+                "25": {
+                    "controlled": 1,
+                    "<5": 2,
+                    "<50": 3,
+                    "<500": 4,
+                    "<5000": 5,
+                    "<50000": 6,
+                    ">50000": 7
+                },
+                "35": {
+                    "controlled": 1,
+                    "<5": 3,
+                    "<50": 4,
+                    "<500": 5,
+                    "<5000": 6,
+                    "<50000": 7,
+                    ">50000": 8
+                },
+                "75": {
+                    "controlled": 2,
+                    "<5": 4,
+                    "<50": 5,
+                    "<500": 6,
+                    "<5000": 7,
+                    "<50000": 8,
+                    ">50000": null
+                },
+                "120": {
+                    "controlled": 3,
+                    "<5": 5,
+                    "<50": 6,
+                    "<500": 7,
+                    "<5000": 8,
+                    "<50000": 9,
+                    ">50000": null
+                },
+                "200": {
+                    "controlled": 3,
+                    "<5": 6,
+                    "<50": 7,
+                    "<500": 8,
+                    "<5000": 9,
+                    "<50000": 10,
+                    ">50000": null
+                }
+            },
+            "8": {
+                "25": {
+                    "controlled": 1,
+                    "<5": 2,
+                    "<50": 3,
+                    "<500": 4,
+                    "<5000": 5,
+                    "<50000": 6,
+                    ">50000": 7
+                },
+                "35": {
+                    "controlled": 1,
+                    "<5": 3,
+                    "<50": 4,
+                    "<500": 5,
+                    "<5000": 6,
+                    "<50000": 7,
+                    ">50000": 8
+                },
+                "75": {
+                    "controlled": 2,
+                    "<5": 4,
+                    "<50": 5,
+                    "<500": 6,
+                    "<5000": 7,
+                    "<50000": 8,
+                    ">50000": null
+                },
+                "120": {
+                    "controlled": 3,
+                    "<5": 5,
+                    "<50": 6,
+                    "<500": 7,
+                    "<5000": 8,
+                    "<50000": 9,
+                    ">50000": null
+                },
+                "200": {
+                    "controlled": 3,
+                    "<5": 6,
+                    "<50": 7,
+                    "<500": 8,
+                    "<5000": 9,
+                    "<50000": 10,
+                    ">50000": null
+                }
+            },
+            "20": {
+                "25": {
+                    "controlled": 1,
+                    "<5": 2,
+                    "<50": 3,
+                    "<500": 4,
+                    "<5000": 5,
+                    "<50000": 6,
+                    ">50000": 7
+                },
+                "35": {
+                    "controlled": 1,
+                    "<5": 3,
+                    "<50": 4,
+                    "<500": 5,
+                    "<5000": 6,
+                    "<50000": 7,
+                    ">50000": 8
+                },
+                "75": {
+                    "controlled": 2,
+                    "<5": 4,
+                    "<50": 5,
+                    "<500": 6,
+                    "<5000": 7,
+                    "<50000": 8,
+                    ">50000": null
+                },
+                "120": {
+                    "controlled": 3,
+                    "<5": 5,
+                    "<50": 6,
+                    "<500": 7,
+                    "<5000": 8,
+                    "<50000": 9,
+                    ">50000": null
+                },
+                "200": {
+                    "controlled": 3,
+                    "<5": 6,
+                    "<50": 7,
+                    "<500": 8,
+                    "<5000": 9,
+                    "<50000": 10,
+                    ">50000": null
+                }
+            },
+            "40": {
+                "25": {
+                    "controlled": 1,
+                    "<5": 2,
+                    "<50": 3,
+                    "<500": 4,
+                    "<5000": 5,
+                    "<50000": 6,
+                    ">50000": 7
+                },
+                "35": {
+                    "controlled": 1,
+                    "<5": 3,
+                    "<50": 4,
+                    "<500": 5,
+                    "<5000": 6,
+                    "<50000": 7,
+                    ">50000": 8
+                },
+                "75": {
+                    "controlled": 2,
+                    "<5": 4,
+                    "<50": 5,
+                    "<500": 6,
+                    "<5000": 7,
+                    "<50000": 8,
+                    ">50000": null
+                },
+                "120": {
+                    "controlled": 3,
+                    "<5": 5,
+                    "<50": 6,
+                    "<500": 7,
+                    "<5000": 8,
+                    "<50000": 9,
+                    ">50000": null
+                },
+                "200": {
+                    "controlled": 3,
+                    "<5": 6,
+                    "<50": 7,
+                    "<500": 8,
+                    "<5000": 9,
+                    "<50000": 10,
+                    ">50000": null
+                }
+            }
+        };
+
+        // SAIL Determination Table (Table 7)
+        const sailTable = {
+            "≤2": { "a": "I", "b": "II", "c": "IV", "d": "VI" },
+            "3": { "a": "II", "b": "II", "c": "IV", "d": "VI" },
+            "4": { "a": "III", "b": "III", "c": "IV", "d": "VI" },
+            "5": { "a": "IV", "b": "IV", "c": "IV", "d": "VI" },
+            "6": { "a": "V", "b": "V", "c": "V", "d": "VI" },
+            "7": { "a": "VI", "b": "VI", "c": "VI", "d": "VI" }
+        };
+
+        // TMPR Requirements (Table 6)
+        const tmprTable = {
+            "a": { "level": "No requirement", "robustness": "No requirement" },
+            "b": { "level": "Low", "robustness": "Low" },
+            "c": { "level": "Medium", "robustness": "Medium" },
+            "d": { "level": "High", "robustness": "High" }
+        };
+
+        function calculateSORA() {
+            // Get inputs
+            const uaWeight = parseFloat(document.getElementById('uaWeight').value) || 0;
+            const maxDimension = document.getElementById('maxDimension').value;
+            const maxSpeed = document.getElementById('maxSpeed').value;
+            const populationDensity = document.getElementById('populationDensity').value;
+            const initialARC = document.getElementById('initialARC').value;
+            const residualARC = document.getElementById('residualARC').value || initialARC;
+
+            // Validate required inputs
+            if (!maxDimension || !maxSpeed || !populationDensity || !initialARC) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Calculate iGRC
+            let iGRC = null;
+
+            // Special case: UA ≤ 250g and speed ≤ 25 m/s
+            if (uaWeight > 0 && uaWeight <= 250 && maxSpeed === "25") {
+                iGRC = 1;
+            } else {
+                // Look up iGRC from table
+                const dimensionKey = maxDimension === ">40" ? "40" : maxDimension;
+                const speedKey = maxSpeed;
+                const popKey = populationDensity;
+
+                if (iGRCTable[dimensionKey] && 
+                    iGRCTable[dimensionKey][speedKey] && 
+                    iGRCTable[dimensionKey][speedKey][popKey] !== undefined) {
+                    iGRC = iGRCTable[dimensionKey][speedKey][popKey];
+                }
+            }
+
+            if (iGRC === null) {
+                alert('Invalid combination of UA characteristics. This operation may be outside SORA scope.');
+                return;
+            }
+
+            // Calculate Final GRC (apply mitigations)
+            let mitigationReduction = 0;
+            mitigationReduction += parseInt(document.querySelector('input[name="m1a"]:checked').value);
+            mitigationReduction += parseInt(document.querySelector('input[name="m1b"]:checked').value);
+            mitigationReduction += parseInt(document.querySelector('input[name="m1c"]:checked').value);
+            mitigationReduction += parseInt(document.querySelector('input[name="m2"]:checked').value);
+
+            // Determine minimum GRC based on dimension and speed column
+            const dimensionKey = maxDimension === ">40" ? "40" : maxDimension;
+            const speedKey = maxSpeed;
+            let minGRC = null;
+            if (iGRCTable[dimensionKey] && iGRCTable[dimensionKey][speedKey]) {
+                const columnValues = Object.values(iGRCTable[dimensionKey][speedKey]).filter(v => v !== null);
+                minGRC = Math.min(...columnValues);
+            }
+
+            let finalGRC = iGRC + mitigationReduction;
+            if (minGRC !== null && finalGRC < minGRC) {
+                finalGRC = minGRC;
+            }
+
+            // Determine SAIL
+            let sail = null;
+            const grcKey = finalGRC <= 2 ? "≤2" : finalGRC.toString();
+            
+            if (finalGRC > 7) {
+                sail = "Category C (Certified)";
+            } else if (sailTable[grcKey] && sailTable[grcKey][residualARC]) {
+                sail = sailTable[grcKey][residualARC];
+            }
+
+            // Get TMPR requirements
+            const tmpr = tmprTable[residualARC];
+
+            // Display results
+            document.getElementById('iGRC').textContent = iGRC;
+            document.getElementById('finalGRC').textContent = finalGRC;
+            document.getElementById('resARC').textContent = residualARC.toUpperCase();
+            document.getElementById('sail').textContent = sail || "N/A";
+
+            // Additional results
+            let additionalHTML = '<div style="padding-top: 40px; border-top: 1px solid #e5e5e5;">';
+            additionalHTML += '<h3 style="font-size: 14px; font-weight: 500; margin-bottom: 32px; letter-spacing: 0.5px; text-transform: uppercase; color: #1a1a1a;">Additional Information</h3>';
+            
+            if (finalGRC > 7) {
+                additionalHTML += '<div class="error-box">';
+                additionalHTML += '<strong>Warning:</strong> Final GRC > 7. This operation is outside SORA scope and should be handled in the certified category.';
+                additionalHTML += '</div>';
+            }
+
+            additionalHTML += '<div style="margin: 24px 0; font-size: 14px; line-height: 1.8;"><strong style="font-weight: 500;">Tactical Mitigation Performance Requirement (TMPR):</strong><br>';
+            additionalHTML += `Level: ${tmpr.level}<br>Robustness: ${tmpr.robustness}</div>`;
+
+            if (mitigationReduction < 0) {
+                additionalHTML += `<div style="margin: 24px 0; font-size: 14px; line-height: 1.8;"><strong style="font-weight: 500;">Ground Risk Mitigation Reduction:</strong> ${mitigationReduction} (from iGRC ${iGRC} to Final GRC ${finalGRC})</div>`;
+            }
+
+            additionalHTML += '<div style="margin: 24px 0; font-size: 14px; line-height: 1.8;"><strong style="font-weight: 500;">Next Steps:</strong><ul style="margin-left: 20px; margin-top: 12px; list-style: none;">';
+            additionalHTML += '<li style="margin-bottom: 8px;">• Review Operational Safety Objectives (OSOs) for SAIL ' + sail + '</li>';
+            additionalHTML += '<li style="margin-bottom: 8px;">• Determine containment requirements based on SAIL and UA characteristics</li>';
+            additionalHTML += '<li style="margin-bottom: 8px;">• Ensure compliance with TMPR requirements for residual ARC ' + residualARC.toUpperCase() + '</li>';
+            additionalHTML += '<li>• Prepare documentation per Annex A guidelines</li>';
+            additionalHTML += '</ul></div>';
+
+            additionalHTML += '</div>';
+            document.getElementById('additionalResults').innerHTML = additionalHTML;
+
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
