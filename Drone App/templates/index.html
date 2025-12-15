@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Regulations Assistant - AI-Powered RAG System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#gradient)"/>
+                        <path d="M20 10L15 15M20 10L25 15M20 10V20M15 15H10M15 15V25M25 15H30M25 15V25M10 20L15 25M30 20L25 25M15 25H25M15 25L20 30M25 25L20 30" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#667eea"/>
+                                <stop offset="100%" stop-color="#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div>
+                        <h1>Drone Regulations Assistant</h1>
+                        <p>AI-Powered FAA Compliance Guide</p>
+                    </div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalRules">0</span>
+                        <span class="stat-label">Regulations</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="queriesCount">0</span>
+                        <span class="stat-label">Queries</span>
+                    </div>
+                </div>
+            </div>
+            <nav style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <a href="/sora_risk_assessment_ui.html" style="margin-right: 20px; color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 500; font-size: 14px;">🔍 SORA Risk Assessment</a>
+                <a href="/population_density_extractor.html" style="color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 500; font-size: 14px;">📊 Population Density</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Quick Examples</h3>
+                    <div class="example-queries">
+                        <button class="example-btn" data-query="What are the requirements for operating a drone beyond visual line of sight?">
+                            📡 BVLOS Operations
+                        </button>
+                        <button class="example-btn" data-query="What are the weight restrictions for package delivery drones?">
+                            📦 Package Delivery
+                        </button>
+                        <button class="example-btn" data-query="What are the altitude restrictions for drone operations?">
+                            ✈️ Altitude Limits
+                        </button>
+                        <button class="example-btn" data-query="What are the requirements for flying in controlled airspace?">
+                            🗺️ Controlled Airspace
+                        </button>
+                        <button class="example-btn" data-query="What training is required for flight coordinators?">
+                            👨‍✈️ Training Requirements
+                        </button>
+                        <button class="example-btn" data-query="What are the regulations for agricultural drone operations?">
+                            🌾 Agricultural Ops
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Categories</h3>
+                    <div id="categoriesList" class="categories-list">
+                        <div class="loading">Loading categories...</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <section class="chat-section">
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="welcome-message">
+                            <div class="welcome-icon">🚁</div>
+                            <h2>Welcome to Drone Regulations Assistant!</h2>
+                            <p>Ask me anything about FAA drone regulations, operating permits, flight operations, and compliance requirements.</p>
+                            <div class="welcome-features">
+                                <div class="feature">
+                                    <span class="feature-icon">🤖</span>
+                                    <span>AI-Powered Responses</span>
+                                </div>
+                                <div class="feature">
+                                    <span class="feature-icon">📚</span>
+                                    <span>Comprehensive Database</span>
+                                </div>
+                                <div class="feature">
+                                    <span class="feature-icon">⚡</span>
+                                    <span>Real-time Search</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="userInput" 
+                                placeholder="Ask about drone regulations, permits, operating requirements..."
+                                rows="1"
+                            ></textarea>
+                            <button id="sendBtn" class="send-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="input-hint">
+                            Press Enter to send • Shift+Enter for new line
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
